@@ -21,7 +21,7 @@ def create_service_ticket():
 @service_tickets_bp('', methods=['GET'])
 def read_service_tickets():
     service_tickets = db.session.query(Service_tickets).all()
-    return service_ticket_schema.jsonify(service_tickets), 200
+    return service_tickets_schema.jsonify(service_tickets), 200
 
 @service_tickets_bp('<int:service_ticket_id>', methods=['GET'])
 def read_service_ticket(service_ticket_id):
