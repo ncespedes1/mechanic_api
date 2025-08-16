@@ -28,7 +28,7 @@ def read_mechanics():
 @mechanics_bp.route('<int:mechanic_id>', methods=['GET'])
 def read_mechanics(mechanic_id):
     mechanic = db.session.get(Mechanics, mechanic_id)
-    return mechanics_schema.jsonify(mechanic), 200
+    return mechanic_schema.jsonify(mechanic), 200
 
 
 @mechanics_bp.route('', methods=['DELETE'])

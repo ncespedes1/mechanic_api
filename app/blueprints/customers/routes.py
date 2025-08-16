@@ -27,7 +27,7 @@ def read_customers():
 @customers_bp.route('<int:customer_id>', methods=['GET'])
 def read_customers(customer_id):
     customer = db.session.get(Customers, customer_id)
-    return customers_schema.jsonify(customer), 200
+    return customer_schema.jsonify(customer), 200
 
 
 @customers_bp.route('', methods=['DELETE'])
