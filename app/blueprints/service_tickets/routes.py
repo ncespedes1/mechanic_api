@@ -2,7 +2,7 @@ from app.blueprints.service_tickets import service_tickets_bp
 from .schemas import service_ticket_schema, service_tickets_schema
 from flask import request, jsonify
 from marshmallow import ValidationError
-from app.models import Service_tickets, db
+from app.models import Service_tickets, Mechanics, db
 
 
 @service_tickets_bp.route('', methods=['POST'])
@@ -40,22 +40,43 @@ def delete_service_tickets(service_ticket_id):
     return jsonify({"message": f"Successfully deleted service ticket {service_ticket_id}"}), 200
 
 
-@service_tickets_bp.route('<int:service_ticket_id>', methods=['PUT'])
-def update_service_ticket(service_ticket_id):
+@service_tickets_bp.route('<int:service_ticket_id>/remove-mechanic/<int:mechanic_id>', methods=['PUT'])
+def remove_mechanic(service_ticket_id, mechanic_id):
     service_ticket = db.session.get(Service_tickets, service_ticket_id)
+    mechanic = db.session.get(Mechanics, mechanic_id)
 
     if not service_ticket:
         return jsonify({"message": "Service ticket not found"}), 404
     
-    try:
-        service_ticket_data = service_ticket_schema.load(request.json)
-    except ValidationError as e:
-        return jsonify({"message": e.messages}), 400
-    
-    for key, value in service_ticket_data.items():
-        setattr(service_ticket, key, value)
+    if not mechanic:
+        return jsonify({"message": "Mechanic not found"}), 404
 
+    if mechanic not in service_ticket.mechanics:
+        return jsonify({"message": f"Mechanic {mechanic.firstname} {mechanic.lastname} not previously assigned to Service Ticket {service_ticket_id}"}), 400
+        
+    service_ticket.mechanics.remove(mechanic)
     db.session.commit()
+
+    return service_ticket_schema.jsonify(service_ticket), 200
+
+
+@service_tickets_bp.route('<int:service_ticket_id>/assign-mechanic/<int:mechanic_id>', methods=['PUT'])
+def assign_mechanic(service_ticket_id, mechanic_id):
+    service_ticket = db.session.get(Service_tickets, service_ticket_id)
+    mechanic = db.session.get(Mechanics, mechanic_id)
+
+    if not service_ticket:
+        return jsonify({"message": "Service Ticket not found"}), 404
+    
+    if not mechanic:
+        return jsonify({"message": "Mechanic not found"}), 404
+    
+    if mechanic in service_ticket.mechanics:
+        return jsonify({"message": f"Mechanic {mechanic.firstname} {mechanic.lastname} already assigned to Service Ticket {service_ticket_id}"}), 400
+        
+    service_ticket.mechanics.append(mechanic)
+    db.session.commit()
+
     return service_ticket_schema.jsonify(service_ticket), 200
 
 
