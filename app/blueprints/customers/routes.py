@@ -25,12 +25,12 @@ def read_customers():
     return customers_schema.jsonify(customers), 200
 
 @customers_bp.route('<int:customer_id>', methods=['GET'])
-def read_customers(customer_id):
+def read_customer(customer_id):
     customer = db.session.get(Customers, customer_id)
     return customer_schema.jsonify(customer), 200
 
 
-@customers_bp.route('', methods=['DELETE'])
+@customers_bp.route('<int:customer_id>', methods=['DELETE'])
 def delete_customers(customer_id):
     customer = db.session.get(Customers, customer_id)
     db.session.delete(customer)
@@ -39,7 +39,7 @@ def delete_customers(customer_id):
     return jsonify({"message": f"Successfully deleted customer {customer_id}"}), 200
 
 
-@customers_bp.route('<int:customer_id', methods=['PUT'])
+@customers_bp.route('<int:customer_id>', methods=['PUT'])
 def update_customer(customer_id):
     customer = db.session.get(Customers, customer_id)
 

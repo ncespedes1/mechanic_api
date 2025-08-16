@@ -26,12 +26,12 @@ def read_mechanics():
 
 
 @mechanics_bp.route('<int:mechanic_id>', methods=['GET'])
-def read_mechanics(mechanic_id):
+def read_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanics, mechanic_id)
     return mechanic_schema.jsonify(mechanic), 200
 
 
-@mechanics_bp.route('', methods=['DELETE'])
+@mechanics_bp.route('<int:mechanic_id>', methods=['DELETE'])
 def delete_mechanics(mechanic_id):
     mechanic = db.session.get(Mechanics, mechanic_id)
     db.session.delete(mechanic)
@@ -40,7 +40,7 @@ def delete_mechanics(mechanic_id):
     return jsonify({"message": f"Successfully deleted mechanic {mechanic_id}"}), 200
 
 
-@mechanics_bp.route('<int:mechanic_id', methods=['PUT'])
+@mechanics_bp.route('<int:mechanic_id>', methods=['PUT'])
 def update_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanics, mechanic_id)
 
