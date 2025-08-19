@@ -3,6 +3,7 @@ from .schemas import service_ticket_schema, service_tickets_schema
 from flask import request, jsonify
 from marshmallow import ValidationError
 from app.models import Service_tickets, Mechanics, db
+from app.extensions import limiter, cache
 
 
 @service_tickets_bp.route('', methods=['POST'])
@@ -20,6 +21,7 @@ def create_service_ticket():
 
 
 @service_tickets_bp.route('', methods=['GET'])
+@cache.cached(timeout=30)
 def read_service_tickets():
     service_tickets = db.session.query(Service_tickets).all()
     return service_tickets_schema.jsonify(service_tickets), 200
@@ -37,10 +39,11 @@ def delete_service_tickets(service_ticket_id):
     db.session.delete(service_ticket)
     db.session.commit()
 
-    return jsonify({"message": f"Successfully deleted service ticket {service_ticket_id}"}), 200
+    return jsonify({"message": f"Successfully deleted Service Ticket {service_ticket_id}"}), 200
 
 
 @service_tickets_bp.route('<int:service_ticket_id>/remove-mechanic/<int:mechanic_id>', methods=['PUT'])
+@limiter.limit("2 per day")
 def remove_mechanic(service_ticket_id, mechanic_id):
     service_ticket = db.session.get(Service_tickets, service_ticket_id)
     mechanic = db.session.get(Mechanics, mechanic_id)
