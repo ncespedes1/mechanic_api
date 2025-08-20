@@ -90,7 +90,13 @@
 					"name": "Update Mechanic",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU3MjQ5NjQsImlhdCI6MTc1NTcyMTM2NCwic3ViIjoiMSJ9.cLQHJB7AWxolRYMsTNNUA8h3HecSONgOgG9Nk_LWrfI",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"firstname\": \"Jose\",\r\n    \"lastname\": \"Ces\",\r\n    \"email\": \"mybro@email.com\",\r\n    \"password\": \"supersecret\",\r\n    \"salary\": \"125000\"\r\n}",
@@ -101,7 +107,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/mechanics/3",
+							"raw": "http://127.0.0.1:5000/mechanics/",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -112,7 +118,7 @@
 							"port": "5000",
 							"path": [
 								"mechanics",
-								"3"
+								""
 							]
 						}
 					},
@@ -122,7 +128,13 @@
 					"name": "Delete Mechanic",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU3MjQ5NjQsImlhdCI6MTc1NTcyMTM2NCwic3ViIjoiMSJ9.cLQHJB7AWxolRYMsTNNUA8h3HecSONgOgG9Nk_LWrfI",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -133,7 +145,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/mechanics/4",
+							"raw": "http://127.0.0.1:5000/mechanics/",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -144,7 +156,39 @@
 							"port": "5000",
 							"path": [
 								"mechanics",
-								"4"
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"bobthebuilder@email.com\",\r\n    \"password\": \"bestbuilder\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/mechanics/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"mechanics",
+								"login"
 							]
 						}
 					},

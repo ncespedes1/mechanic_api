@@ -91,6 +91,8 @@ def update_mechanic():
     db.session.commit()
     return mechanic_schema.jsonify(mechanic), 200
 
+
+
 @mechanics_bp.route('/my-tickets', methods=['GET'])
 @limiter.limit("12 per hour")
 @token_required
