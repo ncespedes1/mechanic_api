@@ -21,7 +21,7 @@ def create_service_ticket():
 
 
 @service_tickets_bp.route('', methods=['GET'])
-@cache.cached(timeout=30)
+# @cache.cached(timeout=30)
 def read_service_tickets():
     service_tickets = db.session.query(Service_tickets).all()
     return service_tickets_schema.jsonify(service_tickets), 200

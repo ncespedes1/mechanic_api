@@ -1,8 +1,34 @@
 from app.blueprints.mechanics import mechanics_bp
-from .schemas import mechanic_schema, mechanics_schema
+from .schemas import mechanic_schema, mechanics_schema, login_schema
 from flask import request, jsonify
 from marshmallow import ValidationError
 from app.models import Mechanics, db
+from app.extensions import limiter
+from werkzeug.security import generate_password_hash, check_password_hash
+from app.util.auth import encode_token, token_required
+
+
+# POST '/login' : passing in email and password, validated by login_schema
+@mechanics_bp.route('/login', methods=['POST'])
+@limiter.limit("6 per 10 min")
+def login():
+    try:
+        data = login_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages), 400
+    
+    mechanic = db.session.query(Mechanics).where(Mechanics.email==data['email']).first()
+
+    if mechanic and check_password_hash(mechanic.password, data['password']):
+        token = encode_token(mechanic.id)
+        return jsonify({
+            "message": f"Welcome {mechanic.firstname} {mechanic.lastname}",
+            "token": token
+        }), 200
+    
+    return jsonify("Invalid email or password"), 403
+
+    
 
 
 @mechanics_bp.route('', methods=['POST'])
