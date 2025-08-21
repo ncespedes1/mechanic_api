@@ -30,6 +30,14 @@ def read_customer(customer_id):
     return customer_schema.jsonify(customer), 200
 
 
+@customers_bp.route('/search-email', methods=['GET'])
+def search_email():
+    email = request.args.get('email')
+    
+    customer = db.session.query(Customers).where(Customers.email==email).first()
+    return customer_schema.jsonify(customer), 200
+
+
 @customers_bp.route('<int:customer_id>', methods=['DELETE'])
 def delete_customers(customer_id):
     customer = db.session.get(Customers, customer_id)
