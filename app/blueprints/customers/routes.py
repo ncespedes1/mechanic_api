@@ -3,6 +3,8 @@ from .schemas import customer_schema, customers_schema
 from flask import request, jsonify
 from marshmallow import ValidationError
 from app.models import Customers, db
+from app.extensions import cache
+
 
 
 @customers_bp.route('', methods=['POST'])
@@ -20,6 +22,7 @@ def create_customer():
 
 
 @customers_bp.route('', methods=['GET'])
+@cache.cached(timeout=30)
 def read_customers():
     customers = db.session.query(Customers).all()
     return customers_schema.jsonify(customers), 200
