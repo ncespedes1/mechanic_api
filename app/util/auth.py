@@ -70,3 +70,4 @@ def token_required(f):
 
 # Additionally add @token_required to any routes you think should require 
 # authorization. (ex: Update, Delete,...)
+

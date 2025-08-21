@@ -85,12 +85,13 @@ def update_mechanic():
     except ValidationError as e:
         return jsonify({"message": e.messages}), 400
     
+    mechanic_data['password'] = generate_password_hash(mechanic_data['password'])
+    
     for key, value in mechanic_data.items():
         setattr(mechanic, key, value)
 
     db.session.commit()
     return mechanic_schema.jsonify(mechanic), 200
-
 
 
 @mechanics_bp.route('/my-tickets', methods=['GET'])
@@ -101,3 +102,27 @@ def my_tickets():
     mechanic = db.session.get(Mechanics, mechanic_id)
 
     return service_tickets_schema.jsonify(mechanic.service_tickets), 200
+
+
+# Route to find which (top 3) mechanics work on the most tickets
+@mechanics_bp.route('/most-tickets', methods=['GET'])
+def most_tickets():
+    mechanics = db.session.query(Mechanics).all()
+
+    mechanics.sort(key=lambda mechanic: len(mechanic.service_tickets), reverse=True)
+
+    output = []
+    for mechanic in mechanics[:3]:
+        mechanic_format = {
+            "mechanic": mechanic_schema.dump(mechanic),
+            "total_tickets": len(mechanic.service_tickets)
+        }
+        output.append(mechanic_format)
+
+    return jsonify(output), 200
+
+
+#-------------------------------------
+#Dont forget to add:
+
+# Turn get Tickets into a paginated route
