@@ -4,6 +4,7 @@ from flask import request, jsonify
 from marshmallow import ValidationError
 from app.models import Service_tickets, Mechanics, db
 from app.extensions import limiter, cache
+from sqlalchemy import select
 
 
 @service_tickets_bp.route('', methods=['POST'])
@@ -23,8 +24,16 @@ def create_service_ticket():
 @service_tickets_bp.route('', methods=['GET'])
 # @cache.cached(timeout=30)
 def read_service_tickets():
-    service_tickets = db.session.query(Service_tickets).all()
-    return service_tickets_schema.jsonify(service_tickets), 200
+    try:
+        page = int(request.args.get('page'))
+        per_page = int(request.args.get('per_page'))
+        query = select(Service_tickets)
+        service_tickets = db.paginate(query, page=page, per_page=per_page)
+        return service_tickets_schema.jsonify(service_tickets), 200
+    
+    except: #default if no pagination
+        service_tickets = db.session.query(Service_tickets).all()
+        return service_tickets_schema.jsonify(service_tickets), 200
 
 
 @service_tickets_bp.route('<int:service_ticket_id>', methods=['GET'])
@@ -81,5 +90,6 @@ def assign_mechanic(service_ticket_id, mechanic_id):
     db.session.commit()
 
     return service_ticket_schema.jsonify(service_ticket), 200
+
 
 

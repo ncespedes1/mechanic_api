@@ -121,8 +121,3 @@ def most_tickets():
 
     return jsonify(output), 200
 
-
-#-------------------------------------
-#Dont forget to add:
-
-# Turn get Tickets into a paginated route

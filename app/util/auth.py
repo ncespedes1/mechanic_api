@@ -44,6 +44,9 @@ def token_required(f):
     
     return decoration
 
+
+
+
 #For practice implement token authentication for your Mechanic shop.
 
 # Create an encode_token function that takes in a mechanic_id to create a 
@@ -59,7 +62,7 @@ def token_required(f):
 
 # Create @token_required wrapper, that validates and unpacks the token, 
 # and stores the id in the request as a field. 
-#----------------------------------------------
+
 # Create a route that requires a token, that returns the 
 # service_tickets related to that mechanic.
 
