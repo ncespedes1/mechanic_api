@@ -18,6 +18,13 @@ ticket_mechanics = Table(
     Column('mechanic_id', Integer, ForeignKey('mechanics.id'))
 )
 
+ticket_parts = Table(
+    'ticket_parts',
+    Base.metadata,
+    Column('ticket_id', Integer, ForeignKey('service_tickets.id')),
+    Column('inventory_id', Integer, ForeignKey('inventory.id'))
+)
+
 class Customers(Base):
     __tablename__ = 'customers'
 
@@ -56,5 +63,23 @@ class Service_tickets(Base):
 
     customer: Mapped['Customers'] = relationship('Customers', back_populates='service_tickets')
     mechanics: Mapped[list['Mechanics']] = relationship('Mechanics', secondary='ticket_mechanics', back_populates='service_tickets')
+    inventory: Mapped[list['Inventory']] = relationship('Inventory', secondary='ticket_parts', back_populates='service_tickets')
 
-    
+class Inventory(Base):
+    __tablename__ = 'inventory'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    desc_id: Mapped[int] = mapped_column(Integer, ForeignKey('inventory_descriptions.id'), nullable=False)
+
+    service_tickets: Mapped[list['Service_tickets']] = relationship('Service_tickets', secondary='ticket_parts', back_populates='inventory')
+    inventory_description: Mapped['Inventory_descriptions'] = relationship('Inventory_descriptions', back_populates='inventory')
+
+
+class Inventory_descriptions(Base):
+    __tablename__ = 'inventory_descriptions'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    price: Mapped[float] = mapped_column(Float, nullable=False)
+
+    inventory: Mapped[list['Inventory']] = relationship('Inventory', back_populates='inventory_description')

@@ -2,7 +2,7 @@ from app.blueprints.service_tickets import service_tickets_bp
 from .schemas import service_ticket_schema, service_tickets_schema
 from flask import request, jsonify
 from marshmallow import ValidationError
-from app.models import Service_tickets, Mechanics, db
+from app.models import Service_tickets, Mechanics, Inventory, db
 from app.extensions import limiter, cache
 from sqlalchemy import select
 
@@ -91,5 +91,23 @@ def assign_mechanic(service_ticket_id, mechanic_id):
 
     return service_ticket_schema.jsonify(service_ticket), 200
 
+@service_tickets_bp.route('<int:service_ticket_id>/assign-part/<int:inventory_id>', methods=['PUT'])
+def assign_part(service_ticket_id, inventory_id):
+    service_ticket = db.session.get(Service_tickets, service_ticket_id)
+    inventory = db.session.get(Inventory, inventory_id)
+
+    if not service_ticket:
+        return jsonify({"message": "Service Ticket not found"}), 404
+    
+    if not inventory:
+        return jsonify({"message": "Part not found"}), 404
+    
+    if inventory in service_ticket.inventory:
+        return jsonify({"message": f"Inventory part already assigned to Service Ticket {service_ticket_id}"}), 400
+        
+    service_ticket.inventory.append(inventory)
+    db.session.commit()
+
+    return service_ticket_schema.jsonify(service_ticket), 200
 
 

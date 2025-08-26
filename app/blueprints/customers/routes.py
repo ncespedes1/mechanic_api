@@ -4,7 +4,7 @@ from flask import request, jsonify
 from marshmallow import ValidationError
 from app.models import Customers, db
 from app.extensions import cache
-
+from sqlalchemy import select
 
 
 @customers_bp.route('', methods=['POST'])
@@ -24,8 +24,16 @@ def create_customer():
 @customers_bp.route('', methods=['GET'])
 @cache.cached(timeout=30)
 def read_customers():
-    customers = db.session.query(Customers).all()
-    return customers_schema.jsonify(customers), 200
+    try:
+        page = int(request.args.get('page'))
+        per_page = int(request.args.get('per_page'))
+        query = select(Customers)
+        service_tickets = db.paginate(query, page=page, per_page=per_page)
+        return customers_schema.jsonify(service_tickets), 200
+    except:
+        customers = db.session.query(Customers).all()
+        return customers_schema.jsonify(customers), 200
+
 
 @customers_bp.route('<int:customer_id>', methods=['GET'])
 def read_customer(customer_id):
