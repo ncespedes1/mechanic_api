@@ -145,6 +145,13 @@ paths:
         - Mechanics
       summary: "Returns a mechanic"
       description: "Endpoint to receive a Mechanic object by using the Mechanic's id."
+      parameters:
+        - in: path
+          name: mechanic_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Mechanic to retrieve
       responses:
         200:
           description: "Successfully Retrieved Mechanic"
@@ -228,6 +235,13 @@ paths:
         - Customers
       summary: "Returns a Customer"
       description: "Endpoint to receive a Customer object by using the Customer's id."
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Customer to retrieve
       responses:
         200:
           description: "Successfully Retrieved Customer"
@@ -239,8 +253,13 @@ paths:
         - Customers
       summary: "Updates a Customer"
       description: "Endpoint to update a Customer profile. Requires a Customer's id."
-      # security:
       parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Customer to retrieve
         - in: "body"
           name: "body"
           description: "Customer Updates"
@@ -273,8 +292,13 @@ paths:
         - Customers
       summary: "Deletes a Customer"
       description: "Deletes a Customer object. Requires a Customer id to identify which Customer to delete."
-      # security:
-      #   - 
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Customer to retrieve
 
       responses:
         200:
@@ -377,6 +401,13 @@ paths:
         - ServiceTickets
       summary: "Returns a Service Ticket"
       description: "Endpoint to receive a Service Ticket object by using the Service Ticket's id."
+      parameters:
+        - in: path
+          name: service_ticket_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the ServiceTicket to retrieve
       responses:
         200:
           description: "Successfully Retrieved Service Ticket"
@@ -389,8 +420,13 @@ paths:
         - ServiceTickets
       summary: "Deletes a Service Ticket"
       description: "Deletes a Service Ticket object. Requires a Service Ticket id to identify which Service Ticket to delete."
-      # security:
-      #   - 
+      parameters:
+        - in: path
+          name: service_ticket_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the ServiceTicket to retrieve
 
       responses:
         200:
@@ -408,6 +444,19 @@ paths:
         -  ServiceTickets
       summary: "Removes an assigned Mechanic from a Service Ticket"
       description:  "Edits a Service Ticket's mechanic assignment by removing a previously assigned Mechanic. The Service Ticket id and Mechanic id is required to identify each."
+      parameters:
+        - in: path
+          name: service_ticket_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the ServiceTicket
+        - in: path
+          name: mechanic_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Mechanic to remove
       responses:
         200:
           description: "Successfully removed Mechanic assignment from Service Ticket"
@@ -421,6 +470,19 @@ paths:
         -  ServiceTickets
       summary: "Assigns a Mechanic to a Service Ticket"
       description:  "Adds a Mechanic assignment to a Service Ticket. The Service Ticket id and Mechanic id is required to identify each."
+      parameters:
+        - in: path
+          name: service_ticket_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the ServiceTicket
+        - in: path
+          name: mechanic_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Mechanic to assign
       responses:
         200:
           description: "Successfully assigned Mechanic to Service Ticket"
@@ -433,6 +495,19 @@ paths:
         -  ServiceTickets
       summary: "Assigns an Inventory Part to a Service Ticket"
       description:  "Adds an Inventory Part to a Service Ticket. The Service Ticket id and Part id is required to identify each."
+      parameters:
+        - in: path
+          name: service_ticket_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the ServiceTicket
+        - in: path
+          name: inventory_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Inventory Part to assign
       responses:
         200:
           description: "Successfully added an Inventory Part to Service Ticket"
@@ -479,12 +554,19 @@ paths:
             $ref: "#/definitions/InventoryPartsResponse"
 
 
-  /parts/inventory_id:
+  /parts/{inventory_id}:
     get:
       tags:
         - Parts
       summary: "Returns an Inventory Part"
       description: "Endpoint to receive an Inventory Part object by using the Inventory Part's id."
+      parameters:
+        - in: path
+          name: inventory_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Inventory Part to retrieve
       responses:
         200:
           description: "Successfully Retrieved Inventory Part"
@@ -497,7 +579,13 @@ paths:
         - Parts
       summary: "Deletes an Inventory Part"
       description: "Deletes a Inventory Part object. Requires a Inventory Part id to identify which Inventory Part to delete."
-      
+      parameters:
+        - in: path
+          name: inventory_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Inventory Part to delete
       responses:
         200:
           description: "Successfully deleted Inventory Part."
@@ -513,6 +601,12 @@ paths:
       summary: "Updates an Inventory Part"
       description: "Endpoint to update an Inventory Part. Requires a Inventory Part's id."
       parameters:
+        - in: path
+          name: inventory_id
+          required: true
+          schema:
+            type: integer
+          description: Numeric ID of the Inventory Part
         - in: "body"
           name: "body"
           description: "Inventory Part Updates"
@@ -592,7 +686,7 @@ definitions:
 
 #-------------------Mechanic Input---------------
 
-MechanicInput: #Sending user Information
+  MechanicInput: #Sending user Information
     type: object
     properties:
       firstname:
@@ -621,7 +715,7 @@ MechanicInput: #Sending user Information
       - password
       - salary
     
-MechanicResponse: 
+  MechanicResponse: 
     type: object
     properties:
       id:
@@ -639,7 +733,7 @@ MechanicResponse:
       address:
         type: string
 
-MechanicsResponse: 
+  MechanicsResponse: 
     type: array
     items:
       type: object
@@ -662,7 +756,7 @@ MechanicsResponse:
 
 #-------------------Mechanic Tickets---------------
 
-MechanicTicketsResponse: 
+  MechanicTicketsResponse: 
     type: array
     items:
       type: object
@@ -688,7 +782,7 @@ MechanicTicketsResponse:
 
 #-------------------Customer Input---------------
 
-CustomerInput: #Sending customer Information
+  CustomerInput: #Sending customer Information
     type: object
     properties:
       firstname:
@@ -713,7 +807,7 @@ CustomerInput: #Sending customer Information
       - email
       - phone
     
-CustomerResponse: 
+  CustomerResponse: 
     type: object
     properties:
       id:
@@ -729,7 +823,7 @@ CustomerResponse:
       address:
         type: string
 
-CustomersResponse: 
+  CustomersResponse: 
     type: array
     items:
       type: object
@@ -753,7 +847,7 @@ CustomersResponse:
 
 #-------------------Service Ticket Input---------------
 
-ServiceTicketInput: #Sending ServiceTicket Information
+  ServiceTicketInput: #Sending ServiceTicket Information
     type: object
     properties:
       customer_id:
@@ -779,7 +873,7 @@ ServiceTicketInput: #Sending ServiceTicket Information
       - VIN
       - service_date
     
-ServiceTicketResponse: 
+  ServiceTicketResponse: 
     type: object
     properties:
       id:
@@ -795,7 +889,7 @@ ServiceTicketResponse:
       service_date:
         type: date
 
-ServiceTicketsResponse: 
+  ServiceTicketsResponse: 
     type: array
     items:
       type: object
@@ -820,7 +914,7 @@ ServiceTicketsResponse:
 
 #-------------------Inventory Part Input---------------
 
-InventoryPartInput: #Sending Inventory Part Information
+  InventoryPartInput: #Sending Inventory Part Information
     type: object
     properties:
       desc_id:
@@ -830,7 +924,7 @@ InventoryPartInput: #Sending Inventory Part Information
     required:
       - desc_id
       
-InventoryPartResponse: 
+  InventoryPartResponse: 
     type: object
     properties:
       id:
@@ -838,7 +932,7 @@ InventoryPartResponse:
       desc_id:
         type: integer
       
-InventoryPartsResponse: 
+  InventoryPartsResponse: 
     type: array
     items:
       type: object
@@ -851,7 +945,7 @@ InventoryPartsResponse:
 
 #------ Inventory Description Input -----
         
-InventoryDescriptionInput:
+  InventoryDescriptionInput:
     type: object
     properties:
       name:
@@ -865,7 +959,7 @@ InventoryDescriptionInput:
       - name
       - price
       
-InventoryDescriptionResponse: 
+  InventoryDescriptionResponse: 
     type: object
     properties:
       id:
