@@ -440,7 +440,119 @@ paths:
             $ref: "#/definitions/ServiceTicketResponse"
 
         #return to add 404 responses
+  
 
+
+  /parts:
+    post:
+      tags:
+        - Parts
+      summary: "Create Inventory Part"
+      description: "Send in Inventory Part info, to create a Inventory Part that will be stored in the database."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "New Inventory Part information"
+          required: true
+          schema:
+            $ref: "#/definitions/InventoryPartInput"
+
+      responses:
+        201:
+          description: "Inventory Part creation Successful"
+          schema:
+            $ref: "#/definitions/InventoryPartResponse"
+          examples:
+            application/json:
+              desc_id: 0
+
+    
+    get:
+      tags:
+        - Parts
+      summary: "Returns all Inventory Parts"
+      description: "Endpoint to receive an array of Inventory Part objects."
+      responses:
+        200:
+          description: "Successfully Retrieved All Inventory Parts"
+          schema:
+            $ref: "#/definitions/InventoryPartsResponse"
+
+
+  /parts/inventory_id:
+    get:
+      tags:
+        - Parts
+      summary: "Returns an Inventory Part"
+      description: "Endpoint to receive an Inventory Part object by using the Inventory Part's id."
+      responses:
+        200:
+          description: "Successfully Retrieved Inventory Part"
+          schema:
+            $ref: "#/definitions/InventoryPartResponse"
+
+    
+    delete:
+      tags:
+        - Parts
+      summary: "Deletes an Inventory Part"
+      description: "Deletes a Inventory Part object. Requires a Inventory Part id to identify which Inventory Part to delete."
+      
+      responses:
+        200:
+          description: "Successfully deleted Inventory Part."
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+    put:
+      tags:
+        - Parts
+      summary: "Updates an Inventory Part"
+      description: "Endpoint to update an Inventory Part. Requires a Inventory Part's id."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Inventory Part Updates"
+          required: true
+          schema:
+            $ref: "#/definitions/InventoryPartInput"
+  
+      responses:
+        200:
+          description: "Successfully updated Inventory Part."
+          schema:
+            $ref: "#/definitions/InventoryPartResponse"
+          examples:
+            application/json:
+              desc_id: 0
+
+  
+  /parts/descriptions:
+    post:
+      tags:
+        - Parts
+      summary: "Create Inventory Part Description"
+      description: "Send in Inventory Description info, to create a Inventory Description that will be stored in the database."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "New Inventory Description information"
+          required: true
+          schema:
+            $ref: "#/definitions/InventoryDescriptionInput"
+
+      responses:
+        201:
+          description: "Inventory Part Description creation Successful"
+          schema:
+            $ref: "#/definitions/InventoryDescriptionResponse"
+          examples:
+            application/json:
+              name: "tire"
+              price: 130.00
 
 
 
@@ -562,7 +674,7 @@ MechanicTicketsResponse:
         service_desc:
           type: string
         price:
-          type: float
+          type: number
         VIN:
           type: string
         service_date:
@@ -651,7 +763,7 @@ ServiceTicketInput: #Sending ServiceTicket Information
         type: string
         example: "Vehicle needs an oil change."
       price:
-        type: float
+        type: number
         example: "123.50"
       VIN:
         type: string
@@ -677,7 +789,7 @@ ServiceTicketResponse:
       service_desc:
         type: string
       price:
-        type: float
+        type: number
       VIN:
         type: string
       service_date:
@@ -695,8 +807,71 @@ ServiceTicketsResponse:
         service_desc:
           type: string
         price:
-          type: float
+          type: number
         VIN:
           type: string
         service_date:
           type: date
+
+#--------------------
+
+
+
+
+#-------------------Inventory Part Input---------------
+
+InventoryPartInput: #Sending Inventory Part Information
+    type: object
+    properties:
+      desc_id:
+        type: integer
+        example: 0
+      
+    required:
+      - desc_id
+      
+InventoryPartResponse: 
+    type: object
+    properties:
+      id:
+        type: integer
+      desc_id:
+        type: integer
+      
+InventoryPartsResponse: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        desc_id:
+          type: integer
+
+
+#------ Inventory Description Input -----
+        
+InventoryDescriptionInput:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "tire"
+      price:
+        type: number
+        example: 12.30
+      
+    required:
+      - name
+      - price
+      
+InventoryDescriptionResponse: 
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+
