@@ -221,6 +221,17 @@ paths:
         - Customers
       summary: "Returns all Customers"
       description: "Endpoint to receive an array of Customer objects."
+      parameters:
+        - name: page
+          in: query
+          description: "Which page to retrieve."
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          description: "Size of page."
+          schema:
+            type: integer
       responses:
         200:
           description: "Successfully Retrieved Customers"
@@ -316,6 +327,13 @@ paths:
         - Customers
       summary: "Returns a Customer"
       description: "Endpoint to receive a Customer object by using the Customer's email."
+      parameters:
+        - name: email
+          in: query
+          description: "Unique email used to identify Customer."
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: "Successfully Retrieved Customer"
@@ -360,39 +378,50 @@ paths:
         - ServiceTickets
       summary: "Returns all Service Tickets"
       description: "Endpoint to receive an array of Service Ticket objects."
+      parameters:
+        - name: page
+          in: query
+          description: "Which page to retrieve."
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          description: "Size of page."
+          schema:
+            type: integer
       responses:
         200:
           description: "Successfully Retrieved All Service Tickets"
           schema:
             $ref: "#/definitions/ServiceTicketsResponse"
  
-    put:
-      tags:
-        - ServiceTickets
-      summary: "Updates a Service Ticket"
-      description: "Endpoint to update a Service Ticket profile. Requires a Service Ticket's id."
-      # security:
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Service Ticket Updates"
-          required: true
-          schema:
-            $ref: "#/definitions/ServiceTicketInput"
+    # put:
+    #   tags:
+    #     - ServiceTickets
+    #   summary: "Updates a Service Ticket"
+    #   description: "Endpoint to update a Service Ticket profile. Requires a Service Ticket's id."
+      
+    #   parameters:
+    #     - in: "body"
+    #       name: "body"
+    #       description: "Service Ticket Updates"
+    #       required: true
+    #       schema:
+    #         $ref: "#/definitions/ServiceTicketInput"
   
-      responses:
-        200:
-          description: "Successfully updated Service Ticket."
-          schema:
-            $ref: "#/definitions/ServiceTicketResponse"
-          examples:
-            application/json:
-              id: 0
-              customer_id: 0
-              service_desc: "Vehicle needs oil change"
-              price: 123.50
-              VIN: "555ABC"
-              service_date: "2025-01-30"
+    #   responses:
+    #     200:
+    #       description: "Successfully updated Service Ticket."
+    #       schema:
+    #         $ref: "#/definitions/ServiceTicketResponse"
+    #       examples:
+    #         application/json:
+    #           id: 0
+    #           customer_id: 0
+    #           service_desc: "Vehicle needs oil change"
+    #           price: 123.50
+    #           VIN: "555ABC"
+    #           service_date: "2025-01-30"
     
 
   /service-tickets/{service_ticket_id}:
