@@ -27,7 +27,9 @@ def login():
             "token": token
         }), 200
     
-    return jsonify("Invalid email or password"), 403
+    return jsonify({
+        "message": "Invalid email or password"
+    }), 401
 
     
 
@@ -54,7 +56,7 @@ def read_mechanics():
 
 
 @mechanics_bp.route('<int:mechanic_id>', methods=['GET'])
-@token_required
+# @token_required
 def read_mechanic(mechanic_id):
     mechanic = db.session.get(Mechanics, mechanic_id)
     return mechanic_schema.jsonify(mechanic), 200

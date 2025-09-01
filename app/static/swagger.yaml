@@ -10,5 +10,693 @@ consumes:
   - "application/json"
 produces:
   - "application/json"
+
+securityDefinitions: #Describing how to add token auth to the endpoints
+  bearerAuth:
+    type: apiKey #double check this later
+    name: Authorization
+    in: header
+
+
 paths: 
+  /mechanics/login:
+    post:
+      tags:
+        - Mechanics
+      summary: "Login endpoint and generates token"
+      description: "Validates Mechanic credentials (email and password), and creates a mechanic specific token."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Login Credentials"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginCredentials"
+      responses:
+        200:
+          description: "Login Successful"
+          schema:
+            $ref: "#/definitions/LoginSuccessResponse"
+          examples:
+            application/json:
+            message: "Welcome Mechanic"
+            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOj..."
+        401:
+          description: "Login Failed"
+          schema:
+            $ref: "#/definitions/LoginFailResponse"
+          examples:
+            application/json:
+            message: "Failed to find Mechanic credentials"
+
+
+  /mechanics:
+    post:
+      tags:
+        - Mechanics
+      summary: "Register Mechanic"
+      description: "Send in Mechanic info, to create a Mechanic profile that will be stored in the database. Address is an optional field."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "New Mechanic information"
+          required: true
+          schema:
+            $ref: "#/definitions/MechanicInput"
+
+      responses:
+        201:
+          description: "Creation Successful"
+          schema:
+            $ref: "#/definitions/MechanicResponse"
+          examples:
+            application/json:
+              id: 0
+              firstname: "Test"
+              lastname: "Mech"
+              email: "test@email.com"
+              password: "<encrypted password>"
+              salary: "123000"
+              address: "123 Fun St."
+
+    
+    get:
+      tags:
+        - Mechanics
+      summary: "Returns all mechanics"
+      description: "Endpoint to receive an array of mechanic objects."
+      responses:
+        200:
+          description: "Successfully Retrieved Mechanics"
+          schema:
+            $ref: "#/definitions/MechanicsResponse"
+
+    put:
+      tags:
+        - Mechanics
+      summary: "Updates a Mechanic"
+      description: "Endpoint to update a Mechanic profile. Requires a token. Mechanic will be identified by token."
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Mechanic Updates"
+          required: true
+          schema:
+            $ref: "#/definitions/MechanicInput"
+  
+      responses:
+        200:
+          description: "Successfully updated Mechanic profile."
+          schema:
+            $ref: "#/definitions/MechanicResponse"
+          examples:
+            application/json:
+              id: 0
+              firstname: "Test"
+              lastname: "Mech"
+              email: "test@email.com"
+              password: "<encrypted password>"
+              salary: "123000"
+              address: "123 Fun St."
+    
+    delete:
+      tags:
+        - Mechanics
+      summary: "Deletes a Mechanic"
+      description: "Deletes a Mechanic object. Requires a token. Token will be used to identify Mechanic to delete."
+      security:
+        - bearerAuth: []
+
+      responses:
+        200:
+          description: "Successfully deleted Mechanic profile."
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+  
+  /mechanics/{mechanic_id}:
+    get:
+      tags:
+        - Mechanics
+      summary: "Returns a mechanic"
+      description: "Endpoint to receive a Mechanic object by using the Mechanic's id."
+      responses:
+        200:
+          description: "Successfully Retrieved Mechanic"
+          schema:
+            $ref: "#/definitions/MechanicResponse"
+
+
+  /mechanics/my-tickets:
+    get:
+      tags:
+        - Mechanics
+      summary: "Returns all Service Tickets assigned to Mechanic"
+      description: "Endpoint to receive an array of Service Ticket objects assigned to Mechanic. Token is required to identify Mechanic."
+      responses:
+        200:
+          description: "Successfully Retrieved Mechanic's Service Tickets"
+          schema:
+            $ref: "#/definitions/MechanicTicketsResponse"
+
+
+  /mechanics/most-tickets:
+    get:
+      tags:
+        - Mechanics
+      summary: "Returns top three mechanics with the most Service Tickets worked on"
+      description: "Endpoint to receive an array of three Mechanic objects. The Mechanics are the top three with the most Service Tickets worked on."
+      responses:
+        200:
+          description: "Successfully Retrieved Mechanic's Service Tickets"
+          schema:
+            $ref: "#/definitions/MechanicsResponse"
+
+
+
+  
+  /customers:
+    post:
+      tags:
+        - Customers
+      summary: "Register Customer"
+      description: "Send in Customer info, to create a Customer profile that will be stored in the database. Email must be unique. Address is an optional field."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "New Customer information"
+          required: true
+          schema:
+            $ref: "#/definitions/CustomerInput"
+
+      responses:
+        201:
+          description: "Customer creation Successful"
+          schema:
+            $ref: "#/definitions/CustomerResponse"
+          examples:
+            application/json:
+              id: 0
+              firstname: "Nik"
+              lastname: "Nak"
+              email: "niknak@email.com"
+              phone: "3334567878"
+              address: "123 Fun St."
+
+    
+    get:
+      tags:
+        - Customers
+      summary: "Returns all Customers"
+      description: "Endpoint to receive an array of Customer objects."
+      responses:
+        200:
+          description: "Successfully Retrieved Customers"
+          schema:
+            $ref: "#/definitions/CustomersResponse"
+
+    
+  /customers/{customer_id}:
+
+    get:
+      tags:
+        - Customers
+      summary: "Returns a Customer"
+      description: "Endpoint to receive a Customer object by using the Customer's id."
+      responses:
+        200:
+          description: "Successfully Retrieved Customer"
+          schema:
+            $ref: "#/definitions/CustomerResponse"
+
+    put:
+      tags:
+        - Customers
+      summary: "Updates a Customer"
+      description: "Endpoint to update a Customer profile. Requires a Customer's id."
+      # security:
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Customer Updates"
+          required: true
+          schema:
+            $ref: "#/definitions/CustomerInput"
+  
+      responses:
+        200:
+          description: "Successfully updated Customer profile."
+          schema:
+            $ref: "#/definitions/CustomerResponse"
+          examples:
+            application/json:
+              id: 0
+              firstname: "Nik"
+              lastname: "Nak"
+              email: "niknak@email.com"
+              phone: "3334567878"
+              address: "123 Fun St."
+
+        #return to edit failed responses
+        400:
+          description: "Failed to update Customer"
+        404:
+          description: "Customer not found"
+    
+    delete:
+      tags:
+        - Customers
+      summary: "Deletes a Customer"
+      description: "Deletes a Customer object. Requires a Customer id to identify which Customer to delete."
+      # security:
+      #   - 
+
+      responses:
+        200:
+          description: "Successfully deleted Customer profile."
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+  
+  /customers/search-email:
+    get:
+      tags:
+        - Customers
+      summary: "Returns a Customer"
+      description: "Endpoint to receive a Customer object by using the Customer's email."
+      responses:
+        200:
+          description: "Successfully Retrieved Customer"
+          schema:
+            $ref: "#/definitions/CustomerResponse"
+  
+
+
+
+
+  /service-tickets:
+    post:
+      tags:
+        - ServiceTickets
+      summary: "Create Service Ticket"
+      description: "Send in Service Ticket info, to create a Service Ticket that will be stored in the database."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "New Service Ticket information"
+          required: true
+          schema:
+            $ref: "#/definitions/ServiceTicketInput"
+
+      responses:
+        201:
+          description: "Service Ticket creation Successful"
+          schema:
+            $ref: "#/definitions/ServiceTicketResponse"
+          examples:
+            application/json:
+              id: 0
+              customer_id: 0
+              service_desc: "Vehicle needs oil change"
+              price: 123.50
+              VIN: "555ABC"
+              service_date: "2025-01-30"
+
+    
+    get:
+      tags:
+        - ServiceTickets
+      summary: "Returns all Service Tickets"
+      description: "Endpoint to receive an array of Service Ticket objects."
+      responses:
+        200:
+          description: "Successfully Retrieved All Service Tickets"
+          schema:
+            $ref: "#/definitions/ServiceTicketsResponse"
+ 
+    put:
+      tags:
+        - ServiceTickets
+      summary: "Updates a Service Ticket"
+      description: "Endpoint to update a Service Ticket profile. Requires a Service Ticket's id."
+      # security:
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Service Ticket Updates"
+          required: true
+          schema:
+            $ref: "#/definitions/ServiceTicketInput"
+  
+      responses:
+        200:
+          description: "Successfully updated Service Ticket."
+          schema:
+            $ref: "#/definitions/ServiceTicketResponse"
+          examples:
+            application/json:
+              id: 0
+              customer_id: 0
+              service_desc: "Vehicle needs oil change"
+              price: 123.50
+              VIN: "555ABC"
+              service_date: "2025-01-30"
+    
+
+  /service-tickets/{service_ticket_id}:
+    get:
+      tags:
+        - ServiceTickets
+      summary: "Returns a Service Ticket"
+      description: "Endpoint to receive a Service Ticket object by using the Service Ticket's id."
+      responses:
+        200:
+          description: "Successfully Retrieved Service Ticket"
+          schema:
+            $ref: "#/definitions/ServiceTicketResponse"
+
+    
+    delete:
+      tags:
+        - ServiceTickets
+      summary: "Deletes a Service Ticket"
+      description: "Deletes a Service Ticket object. Requires a Service Ticket id to identify which Service Ticket to delete."
+      # security:
+      #   - 
+
+      responses:
+        200:
+          description: "Successfully deleted Service Ticket."
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+
+  /service-tickets/{service_ticket_id}/remove-mechanic/{mechanic_id}:
+    put:
+      tags:
+        -  ServiceTickets
+      summary: "Removes an assigned Mechanic from a Service Ticket"
+      description:  "Edits a Service Ticket's mechanic assignment by removing a previously assigned Mechanic. The Service Ticket id and Mechanic id is required to identify each."
+      responses:
+        200:
+          description: "Successfully removed Mechanic assignment from Service Ticket"
+          schema:
+            $ref: "#/definitions/ServiceTicketResponse"
+
+   
+  /service-tickets/{service_ticket_id}/assign-mechanic/{mechanic_id}:
+    put:
+      tags:
+        -  ServiceTickets
+      summary: "Assigns a Mechanic to a Service Ticket"
+      description:  "Adds a Mechanic assignment to a Service Ticket. The Service Ticket id and Mechanic id is required to identify each."
+      responses:
+        200:
+          description: "Successfully assigned Mechanic to Service Ticket"
+          schema:
+            $ref: "#/definitions/ServiceTicketResponse"
+
+  /service-tickets/{service_ticket_id}/assign-part/{inventory_id}:
+    put:
+      tags:
+        -  ServiceTickets
+      summary: "Assigns an Inventory Part to a Service Ticket"
+      description:  "Adds an Inventory Part to a Service Ticket. The Service Ticket id and Part id is required to identify each."
+      responses:
+        200:
+          description: "Successfully added an Inventory Part to Service Ticket"
+          schema:
+            $ref: "#/definitions/ServiceTicketResponse"
+
+        #return to add 404 responses
+
+
+
+
+
+
+
 definitions: 
+
+#-------------------Mechanic Login---------------
+  LoginCredentials: #Input data required for login route
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+
+    required:
+      - email
+      - password
+
+  LoginSuccessResponse: #Response from login endpoint
+    type: object
+    properties:
+      message:
+        type: string
+      token:
+        type: string
+
+  LoginFailResponse:
+    type: object
+    properties:
+      message:
+        type: string
+
+# -------------------
+
+#-------------------Mechanic Input---------------
+
+MechanicInput: #Sending user Information
+    type: object
+    properties:
+      firstname:
+        type: string
+        example: "Test"
+      lastname:
+        type: string
+        example: "Mech"
+      email:
+        type: string
+        example: "test@email.com"
+      password:
+        type: string
+        example: "123"
+      salary:
+        type: string
+        example: "123000" 
+      address:
+        type: string
+        example: "123 Fun St."
+      
+    required:
+      - firstname
+      - lastname
+      - email
+      - password
+      - salary
+    
+MechanicResponse: 
+    type: object
+    properties:
+      id:
+        type: integer
+      firstname:
+        type: string
+      lastname:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      salary:
+        type: string
+      address:
+        type: string
+
+MechanicsResponse: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        salary:
+          type: string
+        address:
+          type: string
+#--------------------
+
+#-------------------Mechanic Tickets---------------
+
+MechanicTicketsResponse: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        customer_id:
+          type: integer
+        service_desc:
+          type: string
+        price:
+          type: float
+        VIN:
+          type: string
+        service_date:
+          type: date
+        
+
+# -------------------
+
+
+
+
+#-------------------Customer Input---------------
+
+CustomerInput: #Sending customer Information
+    type: object
+    properties:
+      firstname:
+        type: string
+        example: "Test"
+      lastname:
+        type: string
+        example: "Mech"
+      email:
+        type: string
+        example: "test@email.com"
+      phone:
+        type: string
+        example: "3334567878" 
+      address:
+        type: string
+        example: "123 Fun St."
+      
+    required:
+      - firstname
+      - lastname
+      - email
+      - phone
+    
+CustomerResponse: 
+    type: object
+    properties:
+      id:
+        type: integer
+      firstname:
+        type: string
+      lastname:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      address:
+        type: string
+
+CustomersResponse: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+#--------------------
+
+
+
+
+#-------------------Service Ticket Input---------------
+
+ServiceTicketInput: #Sending ServiceTicket Information
+    type: object
+    properties:
+      customer_id:
+        type: integer
+        example: 0
+      service_desc:
+        type: string
+        example: "Vehicle needs an oil change."
+      price:
+        type: float
+        example: "123.50"
+      VIN:
+        type: string
+        example: "555ABC" 
+      service_date:
+        type: date
+        example: "2025-01-30"
+      
+    required:
+      - customer_id
+      - service_desc
+      - price
+      - VIN
+      - service_date
+    
+ServiceTicketResponse: 
+    type: object
+    properties:
+      id:
+        type: integer
+      customer_id:
+        type: integer
+      service_desc:
+        type: string
+      price:
+        type: float
+      VIN:
+        type: string
+      service_date:
+        type: date
+
+ServiceTicketsResponse: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        customer_id:
+          type: integer
+        service_desc:
+          type: string
+        price:
+          type: float
+        VIN:
+          type: string
+        service_date:
+          type: date
