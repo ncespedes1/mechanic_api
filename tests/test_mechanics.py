@@ -32,6 +32,15 @@ class TestMechanics(unittest.TestCase):
         self.assertTrue(response.status_code, 200)
         self.assertIn('token', response.json)
 
+    def test_invalid_login(self):
+        login_creds = {
+            "email": "tester@email.com",
+            "password": "not123"
+        }
+
+        response = self.client.post('/mechanics', json=login_creds)
+        self.assertEqual(response.status_code, 400)
+
     def test_create_mechanic(self):
         mechanic_payload = {
             "firstname": "Test",
@@ -115,12 +124,30 @@ class TestMechanics(unittest.TestCase):
         response = self.client.put('/mechanics', headers=headers, json=update_payload)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['salary'], '188000')
+
+    def test_invalid_update(self):
+        headers = {"Authorization": "Bearer " + self.token}
+
+        update_payload = {
+            "firstname": "Nik",
+            "lastname": "Nak",
+            "password": "abc123",
+            "salary": "188000",
+            "address": "888 Best St."
+            }
+        
+        response = self.client.put('/mechanics', headers=headers, json=update_payload)
+        self.assertEqual(response.status_code, 400)
     
     def test_my_tickets(self):
         headers = {"Authorization": "Bearer " + self.token}
 
         response = self.client.get('/mechanics/my-tickets', headers=headers)
         self.assertEqual(response.status_code, 200)
+
+    def test_unauthorized_my_tickets(self):
+        response = self.client.get('/mechanics/my-tickets')
+        self.assertEqual(response.status_code, 401) #401 is unauthorized
         
 
     def test_most_tickets(self):
