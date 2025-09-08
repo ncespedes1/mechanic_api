@@ -3,7 +3,7 @@ from app import create_app
 
 
 
-app = create_app('DevelopmentConfig')
+app = create_app('ProductionConfig')
 
 with app.app_context():
     #db.drop_all()
@@ -11,3 +11,5 @@ with app.app_context():
 
 app.run()
 
+
+#1:26
