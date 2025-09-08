@@ -6,7 +6,7 @@ from flask import request, jsonify
 import os
 
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY') or 'dont tell anyone'
 
 def encode_token(mechanic_id):
     payload = {
