@@ -3,7 +3,7 @@ info:
   title: "Mechanic API"
   description: "This is an API to access Service Tickets and Inventory for a Mechanic Shop"
   version: "1.0.0"
-host: "my-mechanic-helper.onrender.com"
+host: "my-mechanic-helper.onrender.com" #changed from local 
 schemes:
   - "https"
 consumes:
