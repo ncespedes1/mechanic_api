@@ -149,8 +149,7 @@ paths:
         - in: path
           name: mechanic_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Mechanic to retrieve
       responses:
         200:
@@ -225,13 +224,11 @@ paths:
         - name: page
           in: query
           description: "Which page to retrieve."
-          schema:
-            type: integer
+          type: integer
         - name: per_page
           in: query
           description: "Size of page."
-          schema:
-            type: integer
+          type: integer
       responses:
         200:
           description: "Successfully Retrieved Customers"
@@ -250,8 +247,7 @@ paths:
         - in: path
           name: customer_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Customer to retrieve
       responses:
         200:
@@ -307,8 +303,7 @@ paths:
         - in: path
           name: customer_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Customer to retrieve
 
       responses:
@@ -332,8 +327,7 @@ paths:
           in: query
           description: "Unique email used to identify Customer."
           required: true
-          schema:
-            type: string
+          type: string
       responses:
         200:
           description: "Successfully Retrieved Customer"
@@ -382,13 +376,11 @@ paths:
         - name: page
           in: query
           description: "Which page to retrieve."
-          schema:
-            type: integer
+          type: integer
         - name: per_page
           in: query
           description: "Size of page."
-          schema:
-            type: integer
+          type: integer
       responses:
         200:
           description: "Successfully Retrieved All Service Tickets"
@@ -434,8 +426,7 @@ paths:
         - in: path
           name: service_ticket_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the ServiceTicket to retrieve
       responses:
         200:
@@ -453,8 +444,7 @@ paths:
         - in: path
           name: service_ticket_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the ServiceTicket to retrieve
 
       responses:
@@ -477,14 +467,12 @@ paths:
         - in: path
           name: service_ticket_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the ServiceTicket
         - in: path
           name: mechanic_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Mechanic to remove
       responses:
         200:
@@ -503,14 +491,12 @@ paths:
         - in: path
           name: service_ticket_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the ServiceTicket
         - in: path
           name: mechanic_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Mechanic to assign
       responses:
         200:
@@ -528,8 +514,7 @@ paths:
         - in: path
           name: service_ticket_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the ServiceTicket
         - in: path
           name: inventory_id
@@ -593,8 +578,7 @@ paths:
         - in: path
           name: inventory_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Inventory Part to retrieve
       responses:
         200:
@@ -612,8 +596,7 @@ paths:
         - in: path
           name: inventory_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Inventory Part to delete
       responses:
         200:
@@ -633,8 +616,7 @@ paths:
         - in: path
           name: inventory_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Inventory Part
         - in: "body"
           name: "body"
