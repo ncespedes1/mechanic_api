@@ -264,8 +264,7 @@ paths:
         - in: path
           name: customer_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Customer to retrieve
         - in: "body"
           name: "body"
@@ -519,8 +518,7 @@ paths:
         - in: path
           name: inventory_id
           required: true
-          schema:
-            type: integer
+          type: integer
           description: Numeric ID of the Inventory Part to assign
       responses:
         200:
