@@ -64,7 +64,7 @@ jobs: #The actions
 
   
   deploy:
-    needs: test #Means that we need the build job to complete before we run our tests
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
