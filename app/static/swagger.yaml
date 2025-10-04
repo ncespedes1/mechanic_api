@@ -39,15 +39,24 @@ paths:
             $ref: "#/definitions/LoginSuccessResponse"
           examples:
             application/json:
-            message: "Welcome Mechanic"
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOj..."
+              message: "Welcome Mechanic"
+              token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOj..."
+              mechanic: 
+                id: 0
+                firstname: "Test"
+                lastname: "Mech"
+                email: "test@email.com"
+                password: "<encrypted password>"
+                salary: "123000"
+                address: "123 Fun St."
+
         401:
           description: "Login Failed"
           schema:
             $ref: "#/definitions/LoginFailResponse"
           examples:
             application/json:
-            message: "Failed to find Mechanic credentials"
+              message: "Failed to find Mechanic credentials"
 
 
   /mechanics:
@@ -684,6 +693,8 @@ definitions:
         type: string
       token:
         type: string
+      mechanic:
+       $ref: '#/definitions/MechanicResponse'
 
   LoginFailResponse:
     type: object

@@ -24,7 +24,8 @@ def login():
         token = encode_token(mechanic.id)
         return jsonify({
             "message": f"Welcome {mechanic.firstname} {mechanic.lastname}",
-            "token": token
+            "token": token,
+            "mechanic": mechanic_schema.dump(mechanic)
         }), 200
     
     return jsonify({
